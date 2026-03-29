@@ -15,7 +15,9 @@ RUN apt-get update && apt-get install -y \
 
 # --- Install Go ---
 ARG GO_VERSION=1.26.1
-RUN curl -fsSL "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" \
+# Map Docker's TARGETARCH (amd64/arm64) to Go's arch naming (amd64/arm64 — identical here)
+ARG TARGETARCH
+RUN curl -fsSL "https://dl.google.com/go/go${GO_VERSION}.linux-${TARGETARCH}.tar.gz" \
     | tar -C /usr/local -xz
 ENV PATH="/usr/local/go/bin:${PATH}"
 RUN go version
