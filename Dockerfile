@@ -44,6 +44,7 @@ FROM debian:trixie-slim AS runtime
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     libssl3 \
+    sqlite3 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user
@@ -57,11 +58,16 @@ COPY --from=builder /build/target/release/rustbin /app/rustbin
 # Copy the example env as a default baseline (override at runtime)
 COPY --from=builder /build/.env.example /app/.env.example
 
+# Entrypoint script: initialises the DB file then execs the binary
+COPY entrypoint.sh /app/entrypoint.sh
+
+# Persistent data directory — mount a volume here to keep the DB across restarts
+RUN mkdir -p /app/data
+
 RUN chown -R rustbin:rustbin /app
 USER rustbin
 
 EXPOSE 3000
 
-# Expects DATABASE_URL (and other env vars) to be set at runtime,
-# either via --env-file, -e flags, or a mounted .env file.
+ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["/app/rustbin"]

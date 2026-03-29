@@ -11,8 +11,6 @@ docker run -d \
   -p 3000:3000 \
   -v rustbin-data:/app/data \
   -e DATABASE_URL=sqlite:///app/data/rustbin.db \
-  -e HOST=0.0.0.0 \
-  -e PORT=3000 \
   leddaz/rustbin:latest
 ```
 
@@ -30,14 +28,6 @@ services:
       - rustbin-data:/app/data
     environment:
       DATABASE_URL: sqlite:///app/data/rustbin.db
-      HOST: 0.0.0.0
-      PORT: 3000
-      MAX_PASTE_SIZE: 2MB
-      RENDER_CACHE_CAPACITY: 128
-      CLEANUP_INTERVAL: 3600
-      DB_MIN_CONNECTIONS: 1
-      DB_MAX_CONNECTIONS: 5
-      RUST_LOG: rustbin=info
 
 volumes:
   rustbin-data:
@@ -45,16 +35,4 @@ volumes:
 
 ## Configuration
 
-All configuration is done through environment variables.
-
-| Variable | Default | Description |
-| --- | --- | --- |
-| `DATABASE_URL` | `sqlite://rustbin.db` | SQLite connection string |
-| `HOST` | `0.0.0.0` | Bind address |
-| `PORT` | `3000` | Bind port |
-| `MAX_PASTE_SIZE` | `2MB` | Maximum upload size (supports `KB`, `MB`, `GB`) |
-| `RENDER_CACHE_CAPACITY` | `128` | Number of rendered HTML entries to cache |
-| `CLEANUP_INTERVAL` | `3600` | Seconds between expired-paste cleanup runs |
-| `DB_MIN_CONNECTIONS` | `1` | SQLite connection pool minimum |
-| `DB_MAX_CONNECTIONS` | `5` | SQLite connection pool maximum |
-| `RUST_LOG` | `rustbin=info` | Log level filter |
+Refer to the [original repo](https://github.com/PeroSar/rustbin#configuration).
